@@ -9,6 +9,8 @@ struct Calculations {
         case equal
     }
     
+    var accumulator: Double?
+    
     private var operation: Dictionary<String, Functions> = [
         "±" : Functions.unaryOperation({ -$0 }),
         //"%" : Functions.unaryOperation( { $0 / 100}),
@@ -22,7 +24,9 @@ struct Calculations {
     ]
     
     
-    
+    func performOperation() {
+        
+    }
     
     
     
