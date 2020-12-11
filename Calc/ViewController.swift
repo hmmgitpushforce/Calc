@@ -2,22 +2,41 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    var userIsTyping: Bool = false
-    var firstOperand: String?
+    var userIsTyping = false
     
     @IBOutlet weak var resultLabel: UILabel!
     
     @IBAction func swipeHandlerRight(_ gestureRecognizer: UISwipeGestureRecognizer) {
         
         if gestureRecognizer.state == .ended {
-            resultLabel.text = "Success Right"
+            var valueBeforeGesture = resultLabel.text!
+            if valueBeforeGesture.count > 1 {
+                valueBeforeGesture.remove(at: valueBeforeGesture.index(before: valueBeforeGesture.endIndex))
+                resultLabel.text = valueBeforeGesture
+            } else if valueBeforeGesture.count == 1 {
+                resultLabel.text = "0"
+                userIsTyping = false
+            } else if resultLabel.text == "0" {
+                resultLabel.text = "0"
+                userIsTyping = false
+            }
         }
     }
     
     @IBAction func swipeHandlerLeft(_ gestureRecognizer: UISwipeGestureRecognizer) {
         
         if gestureRecognizer.state == .ended {
-            resultLabel.text = "Success Left"
+            var valueBeforeGesture = resultLabel.text!
+            if valueBeforeGesture.count > 1 {
+                valueBeforeGesture.remove(at: valueBeforeGesture.index(before: valueBeforeGesture.endIndex))
+                resultLabel.text = valueBeforeGesture
+            } else if valueBeforeGesture.count == 1 {
+                resultLabel.text = "0"
+                userIsTyping = false
+            } else if resultLabel.text == "0" {
+                resultLabel.text = "0"
+                userIsTyping = false
+            }
         }
     }
     
@@ -30,20 +49,40 @@ class ViewController: UIViewController {
     
     
     @IBAction func numberButtonTouched(_ sender: UIButton) {
+        let digit = sender.currentTitle!
         if userIsTyping {
-            resultLabel.text! += sender.titleLabel!.text!
+            let textCurrentlyOnDisplay = resultLabel.text!
+            resultLabel.text = textCurrentlyOnDisplay + digit
+        } else {
+            resultLabel.text = digit
+            userIsTyping = true
         }
-        else {
-            resultLabel.text! = ""
-            resultLabel.text! += sender.titleLabel!.text!
-        }
-        userIsTyping = true
-        //firstOperand += sender.titleLabel!.text
         
     }
     
+    var resultValue: Double {
+        get {
+            return(Double(resultLabel.text!)!)
+        }
+        set {
+            resultLabel.text = String(newValue)
+        }
+    }
+    
+    private var model = Model()
+    
+    
     @IBAction func functionalButtonTouched(_ sender: UIButton) {
-        userIsTyping = false
+        if userIsTyping {
+            model.setOperand(resultValue)
+            userIsTyping = false
+        }
+        if let mathematicalSymbol = sender.currentTitle {
+            model.performOperation(mathematicalSymbol)
+        }
+        if let result = model.result {
+            resultValue = result
+        }
         
     }
     
