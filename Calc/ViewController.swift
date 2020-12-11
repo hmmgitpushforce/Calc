@@ -7,13 +7,12 @@ func gesture(_ label: String) -> String {
         return(valueBeforeGesture)
     } else {
         return("0")
-        ViewController().userIsTyping = false
     }
 }
 
 class ViewController: UIViewController {
     
-    public var userIsTyping = false
+    var userIsTyping = false
     
     @IBOutlet weak var resultLabel: UILabel!
     
@@ -21,6 +20,9 @@ class ViewController: UIViewController {
         
         if gestureRecognizer.state == .ended {
             resultLabel.text = gesture(resultLabel.text!)
+            if resultLabel.text!.count == 1 {
+                userIsTyping = false
+            }
         }
     }
     
@@ -28,18 +30,14 @@ class ViewController: UIViewController {
         
         if gestureRecognizer.state == .ended {
             resultLabel.text = gesture(resultLabel.text!)
+            if resultLabel.text!.count == 1 {
+                userIsTyping = false
+            }
         }
     }
     
     
-    
-    
-    
-    
-    
-    
-    
-    @IBAction func numberButtonTouched(_ sender: UIButton) {
+   @IBAction func numberButtonTouched(_ sender: UIButton) {
         let digit = sender.currentTitle!
         if userIsTyping {
             let textCurrentlyOnDisplay = resultLabel.text!
