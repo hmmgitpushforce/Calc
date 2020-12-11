@@ -1,42 +1,33 @@
 import UIKit
 
+func gesture(_ label: String) -> String {
+    var valueBeforeGesture = label
+    if valueBeforeGesture.count > 1 {
+        valueBeforeGesture.remove(at: valueBeforeGesture.index(before: valueBeforeGesture.endIndex))
+        return(valueBeforeGesture)
+    } else {
+        return("0")
+        ViewController().userIsTyping = false
+    }
+}
+
 class ViewController: UIViewController {
     
-    var userIsTyping = false
+    public var userIsTyping = false
     
     @IBOutlet weak var resultLabel: UILabel!
     
     @IBAction func swipeHandlerRight(_ gestureRecognizer: UISwipeGestureRecognizer) {
         
         if gestureRecognizer.state == .ended {
-            var valueBeforeGesture = resultLabel.text!
-            if valueBeforeGesture.count > 1 {
-                valueBeforeGesture.remove(at: valueBeforeGesture.index(before: valueBeforeGesture.endIndex))
-                resultLabel.text = valueBeforeGesture
-            } else if valueBeforeGesture.count == 1 {
-                resultLabel.text = "0"
-                userIsTyping = false
-            } else if resultLabel.text == "0" {
-                resultLabel.text = "0"
-                userIsTyping = false
-            }
+            resultLabel.text = gesture(resultLabel.text!)
         }
     }
     
     @IBAction func swipeHandlerLeft(_ gestureRecognizer: UISwipeGestureRecognizer) {
         
         if gestureRecognizer.state == .ended {
-            var valueBeforeGesture = resultLabel.text!
-            if valueBeforeGesture.count > 1 {
-                valueBeforeGesture.remove(at: valueBeforeGesture.index(before: valueBeforeGesture.endIndex))
-                resultLabel.text = valueBeforeGesture
-            } else if valueBeforeGesture.count == 1 {
-                resultLabel.text = "0"
-                userIsTyping = false
-            } else if resultLabel.text == "0" {
-                resultLabel.text = "0"
-                userIsTyping = false
-            }
+            resultLabel.text = gesture(resultLabel.text!)
         }
     }
     
@@ -65,7 +56,12 @@ class ViewController: UIViewController {
             return(Double(resultLabel.text!)!)
         }
         set {
-            resultLabel.text = String(newValue)
+            let resultIsInteger = floor(newValue) == newValue
+            if resultIsInteger {
+                resultLabel.text = String(Int(newValue))
+            } else {
+                resultLabel.text = String(newValue)
+            }
         }
     }
     
